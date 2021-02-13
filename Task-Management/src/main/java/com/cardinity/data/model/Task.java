@@ -1,11 +1,13 @@
-package com.cardinity.project.model;
+package com.cardinity.data.model;
 
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -31,16 +33,19 @@ public class Task implements Serializable {
 	
 	@NotEmpty
 	@NotNull
+	@Column(unique=true)
 	private String title;
 	
 	@NotEmpty
 	@NotNull
 	private String description;
 	
+	@NotEmpty
 	@NotNull
-	private Status status;
+	private String status;
 	
 	@NotNull
+	@ManyToOne
 	private Project project;
 	
 	@Temporal(TemporalType.DATE)
@@ -54,9 +59,11 @@ public class Task implements Serializable {
 		this.creationDate = new Date();
 	}
 	
-	public Task() {}
+	public Task() {
+		super();
+	}
 
-	public Task(@NotEmpty @NotNull String title, @NotEmpty @NotNull String description, @NotNull Status status,
+	public Task(@NotEmpty @NotNull String title, @NotEmpty @NotNull String description, @NotEmpty @NotNull String status,
 			@NotNull Project project, Date endDate) {
 		super();
 		this.title = title;
@@ -78,7 +85,7 @@ public class Task implements Serializable {
 		return description;
 	}
 
-	public Status getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
@@ -106,7 +113,7 @@ public class Task implements Serializable {
 		this.description = description;
 	}
 
-	public void setStatus(Status status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 

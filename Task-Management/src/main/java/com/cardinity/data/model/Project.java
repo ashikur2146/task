@@ -1,7 +1,8 @@
-package com.cardinity.project.model;
+package com.cardinity.data.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -21,10 +22,11 @@ public class Project implements Serializable {
 
 	@Id
 	@GeneratedValue
-	private long id;
+	private Long id;
 	
 	@NotEmpty
 	@NotNull
+	@Column(unique=true)
 	private String title;
 	
 	public Project() {
@@ -38,5 +40,9 @@ public class Project implements Serializable {
 	
 	public String getTitle() {
 		return title;
+	}
+	
+	public Long getId() {
+		return id;
 	}
 }
