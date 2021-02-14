@@ -1,4 +1,4 @@
-package com.cardinity.project.management;
+package com.cardinity.app.executables;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

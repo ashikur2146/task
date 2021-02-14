@@ -1,4 +1,4 @@
-package com.cardinity.project.management;
+package com.cardinity.app.executables;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,11 +1,11 @@
 package com.cardinity.project.exception;
 
-public class TaskException extends Exception {
+public class CustomException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 	private String message;
 	
-	public TaskException(String message) {
+	public CustomException(String message) {
 		this.message = message;
 	}
 	
