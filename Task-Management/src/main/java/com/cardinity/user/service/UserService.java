@@ -8,7 +8,7 @@ public interface UserService {
 	public User getOneById(Long id);
 	public User getUserByName(String userName);
 	public List<User> getAllUsers();
-	public User createUser(User user);
+	public User createUser(String userName, String passWord);
 	public User updateUser(User user);
 	public void deleteUser(Long id);
 	public User addRoleToUser(String userName, String roleName);

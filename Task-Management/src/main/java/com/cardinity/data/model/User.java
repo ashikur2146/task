@@ -70,5 +70,27 @@ public class User implements Serializable {
 
 	public List<Role> getRoles() {
 		return roles;
-	}	
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public void setActivated(boolean activated) {
+		this.activated = activated;
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
+	
+	
 }

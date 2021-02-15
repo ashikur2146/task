@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cardinity.data.model.User;
+import com.cardinity.user.service.UserRegistration;
 import com.cardinity.user.service.UserService;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
+	
 	@Autowired
 	private UserService userService;
 	
@@ -31,17 +33,17 @@ public class UserController {
 		return ResponseEntity.ok(userService.getOneById(userId));
 	}
 	
-	@RequestMapping(value="", method=RequestMethod.POST, consumes="application/json", produces="application/json")
+	@RequestMapping(value="/register", method=RequestMethod.POST, consumes="application/json", produces="application/json")
 	@ResponseBody
-	public ResponseEntity<?> createUser(final @RequestBody User user) {
-		userService.createUser(user);
+	public ResponseEntity<?> register(final @RequestBody UserRegistration userRegistration) {
+		userService.createUser(userRegistration.getUsername(), userRegistration.getPassword());	
 		return ResponseEntity.ok(HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="", method=RequestMethod.PUT, consumes="application/json", produces="application/json")
 	@ResponseBody
 	public ResponseEntity<?> updateUser(final @RequestBody User user) {
-		userService.createUser(user);
+		userService.updateUser(user);
 		return ResponseEntity.ok(HttpStatus.OK);
 	}
 	
