@@ -36,6 +36,9 @@ public class TaskManagementApplication implements CommandLineRunner {
 		  roleService.createRole(new Role("USER"));
 		  userService.createUser("ADMIN", "ADMIN");
 		  userService.addRoleToUser("ADMIN", "ADMIN");
+		  userService.createUser("user1", "user1");
+		  userService.createUser("user2", "user2");
+		  userService.createUser("user3", "user3");
 	}
 
 }
