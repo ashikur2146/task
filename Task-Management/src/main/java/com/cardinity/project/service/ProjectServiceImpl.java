@@ -42,4 +42,11 @@ public class ProjectServiceImpl implements ProjectService {
 		Project project = projectRepository.getOne(id);
 		projectRepository.delete(project);
 	}
+
+	@Override
+	public Project findProjectByTitle(String projectTitle) {
+		Project project = this.getAllProjects().parallelStream().filter(p -> p.getTitle().equals(projectTitle))
+				.findFirst().orElse(null);
+		return project;
+	}
 }

@@ -48,6 +48,10 @@ public class Task implements Serializable {
 	@ManyToOne
 	private Project project;
 	
+	@NotNull
+	@ManyToOne
+	private User user;
+	
 	@Temporal(TemporalType.DATE)
 	private Date creationDate;
 	
@@ -99,6 +103,14 @@ public class Task implements Serializable {
 
 	public Date getEndDate() {
 		return endDate;
+	}
+	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public void setId(long id) {

@@ -14,7 +14,7 @@ public interface TaskService {
 	public List<Task> getTasksByProjectTitle(String projectTitle);
 	public List<Task> getTasksByStatus(Status status);
 	public List<Task> getTasksByDueDate(Date dueDate);
-	public Task saveTask(Task task);
+	public Task createTask(Task task);
 	public Task updateTask(Task task);
 	public void deleteTask(Long id);
 }

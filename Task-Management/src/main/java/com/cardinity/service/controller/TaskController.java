@@ -42,10 +42,12 @@ public class TaskController {
 	@RequestMapping(value="", method=RequestMethod.POST, consumes="application/json", produces="application/json")
 	@ResponseBody
 	public ResponseEntity<?> createTask(final @RequestBody Task task) {
-		Task newTask = taskService.saveTask(task);
-		if(newTask == null)
-			return new ResponseEntity<Message>(new Message("No Project Found with title : " + task.getProject().getTitle()), HttpStatus.OK);
-		return ResponseEntity.ok(HttpStatus.OK);
+		try {
+			taskService.createTask(task);
+		} catch(Exception e) {
+			return new ResponseEntity<Message>(new Message(e.getMessage()), HttpStatus.OK);
+		}
+		return new ResponseEntity<Message>(new Message("Task creation is successful!"), HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="", method=RequestMethod.PUT, consumes="application/json", produces="application/json")

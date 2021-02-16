@@ -7,13 +7,18 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.cardinity.data.model.Project;
 import com.cardinity.data.model.Status;
 import com.cardinity.data.model.Task;
-import com.cardinity.data.repository.ProjectRepository;
+import com.cardinity.data.model.User;
 import com.cardinity.data.repository.TaskRepository;
+import com.cardinity.project.exception.CustomException;
+import com.cardinity.project.service.ProjectService;
+import com.cardinity.user.service.UserService;
 
 @Service
 @Transactional
@@ -23,7 +28,10 @@ public class TaskServiceImpl implements TaskService {
 	private TaskRepository taskRepository;
 	
 	@Autowired
-	private ProjectRepository projectRepository;
+	private ProjectService projectService;
+	
+	@Autowired
+	private UserService userService;
 
 	@Override
 	public Task getTaskById(Long id) {
@@ -36,11 +44,22 @@ public class TaskServiceImpl implements TaskService {
 	}
 
 	@Override
-	public Task saveTask(Task task) {
-		Project project = task.getProject();
-		Boolean hasProject = projectRepository.existsById(project.getId());
-		if (!hasProject)
-			return null;
+	public Task createTask(Task task) {
+		String username = "";
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (principal instanceof UserDetails) {
+			username = ((UserDetails)principal).getUsername();
+		} else {
+			username = principal.toString();
+		}
+		User user = userService.getUserByName(username);
+		if (user == null)
+			throw new CustomException("Login before creating a task");
+		task.setUser(user);
+		String projectTitle = task.getProject().getTitle();
+		Project project = projectService.findProjectByTitle(projectTitle);
+		if (project == null)
+			throw new CustomException(projectTitle + " project not found.");
 		return taskRepository.saveAndFlush(task);
 	}
 
