@@ -26,8 +26,8 @@ public class JWTUserDetailsService implements UserDetailsService {
 		 User user = userService.getUserByName(username);
 	     if (user == null) throw new CustomException("User doesn't exist!");
 	     Collection<GrantedAuthority> authorities = new ArrayList<>();
-	     user.getRoles().forEach(role -> { authorities.add(new
-	    		SimpleGrantedAuthority(role.getRoleName()));
+	     user.getRoles().forEach(role -> { 
+	    	 authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
 	     }); 
 	     return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(), authorities); 
 	 }

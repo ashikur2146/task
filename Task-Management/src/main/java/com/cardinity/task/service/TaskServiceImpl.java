@@ -60,6 +60,7 @@ public class TaskServiceImpl implements TaskService {
 		Project project = projectService.findProjectByTitle(projectTitle);
 		if (project == null)
 			throw new CustomException(projectTitle + " project not found.");
+		task.setProject(project);
 		return taskRepository.saveAndFlush(task);
 	}
 
