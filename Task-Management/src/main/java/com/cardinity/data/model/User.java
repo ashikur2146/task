@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -46,6 +47,12 @@ public class User implements Serializable {
 	@JoinTable(name = "users_roles")
 	private List<Role> roles = new ArrayList<>();
 	
+	@OneToMany
+	private List<Task> tasks = new ArrayList<>();
+	
+	@OneToMany
+	private List<Project> projects = new ArrayList<>();
+	
 	public User() {
 		super();
 	}
@@ -75,6 +82,18 @@ public class User implements Serializable {
 	public String getPassword() {
 		return password;
 	}
+	
+	public List<Task> getTasks() {
+		return tasks;
+	}
+
+	public List<Project> getProjects() {
+		return projects;
+	}
+
+	public void setProjects(List<Project> projects) {
+		this.projects = projects;
+	}
 
 	public void setUserName(String userName) {
 		this.userName = userName;
@@ -91,6 +110,4 @@ public class User implements Serializable {
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
-	
-	
 }

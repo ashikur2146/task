@@ -1,6 +1,11 @@
 package com.cardinity.service.controller;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,25 +28,45 @@ public class TaskController {
 	
 	@Autowired
 	private TaskService taskService;
-	
+		
 	private static final String CLOSED_STATUS = "CLOSED";
 	private static final String CLOSED_STATUS_EDIT_MESSAGE = "CLOSED TASK CANNOT BE EDITED.";
 	
-	@RequestMapping(value="", method=RequestMethod.GET, produces="application/json")
+	@RequestMapping(value="/all-tasks", method=RequestMethod.GET, produces="application/json")
 	@ResponseBody
 	public ResponseEntity<?> getAllTasks() {
 		return ResponseEntity.ok(taskService.getAllTasks());
 	}
 	
+	@RequestMapping(value="/all-tasks/user/{name}", method=RequestMethod.GET, produces="application/json")
+	@ResponseBody
+	public ResponseEntity<?> getAllTasksByUserName(final @PathVariable @NotEmpty @NotNull String username) {
+		List<Task> tasks = taskService.getAllTasks().parallelStream()
+				.filter(t -> t.getUser().getUserName().equalsIgnoreCase(username)).collect(Collectors.toList()); 
+		if (tasks.size() < 1)
+			return new ResponseEntity<Message>(new Message("User has no tasks!"), HttpStatus.OK);
+		return ResponseEntity.ok(tasks);
+	}
+	
+	@RequestMapping(value="/all-tasks/user/{id}", method=RequestMethod.GET, produces="application/json")
+	@ResponseBody
+	public ResponseEntity<?> getAllTasksById(final @PathVariable @NotNull Long id) {
+		List<Task> tasks = taskService.getAllTasks().parallelStream()
+				.filter(t -> t.getUser().getId() == id).collect(Collectors.toList()); 
+		if (tasks.size() < 1)
+			return new ResponseEntity<Message>(new Message("User has no tasks!"), HttpStatus.OK);
+		return ResponseEntity.ok(tasks);
+	}
+	
 	@RequestMapping(value="/{id}", method=RequestMethod.GET, produces="application/json")
 	@ResponseBody
-	public ResponseEntity<?> findTask(final @PathVariable Long id) {
+	public ResponseEntity<?> findTask(final @PathVariable @NotNull Long id) {
 		return ResponseEntity.ok(taskService.getTaskById(id));
 	}
 	
-	@RequestMapping(value="", method=RequestMethod.POST, consumes="application/json", produces="application/json")
+	@RequestMapping(value="/create-task", method=RequestMethod.POST, consumes="application/json", produces="application/json")
 	@ResponseBody
-	public ResponseEntity<?> createTask(final @RequestBody Task task) {
+	public ResponseEntity<?> createTask(final @RequestBody @NotNull Task task) {
 		try {
 			taskService.createTask(task);
 		} catch(Exception e) {
@@ -50,9 +75,9 @@ public class TaskController {
 		return new ResponseEntity<Message>(new Message("Task creation is successful!"), HttpStatus.OK);
 	}
 	
-	@RequestMapping(value="", method=RequestMethod.PUT, consumes="application/json", produces="application/json")
+	@RequestMapping(value="/update-task", method=RequestMethod.PUT, consumes="application/json", produces="application/json")
 	@ResponseBody
-	public ResponseEntity<?> updateEmployee(final @RequestBody Task task) {
+	public ResponseEntity<?> updateEmployee(final @RequestBody @NotNull Task task) {
 		if (task.getStatus().equals(CLOSED_STATUS))
 			return new ResponseEntity<Message>(new Message(CLOSED_STATUS_EDIT_MESSAGE), HttpStatus.OK);
 		taskService.updateTask(task);

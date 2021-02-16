@@ -19,7 +19,7 @@ public class ProjectController {
 	@Autowired
 	private ProjectService projectService;
 	
-	@RequestMapping(value="", method=RequestMethod.GET, produces="application/json")
+	@RequestMapping(value="/all-projects", method=RequestMethod.GET, produces="application/json")
 	@ResponseBody
 	public ResponseEntity<?> getAllProjects() {
 		return ResponseEntity.ok(projectService.getAllProjects());
@@ -31,7 +31,7 @@ public class ProjectController {
 		return ResponseEntity.ok(projectService.findProject(projectId));
 	}
 	
-	@RequestMapping(value="", method=RequestMethod.POST, consumes="application/json", produces="application/json")
+	@RequestMapping(value="/create-project", method=RequestMethod.POST, consumes="application/json", produces="application/json")
 	@ResponseBody
 	public ResponseEntity<?> createProject(final @RequestBody Project project) {
 		projectService.createProject(project);

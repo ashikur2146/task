@@ -9,7 +9,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.cardinity.data.model.Project;
 import com.cardinity.data.model.Role;
+import com.cardinity.data.model.Task;
 import com.cardinity.data.model.User;
 import com.cardinity.data.repository.UserRepository;
 import com.cardinity.project.exception.CustomException;
@@ -86,6 +88,20 @@ public class UserServiceImpl implements UserService {
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+
+	@Override
+	public User addTaskToUser(String userName, Task task) {
+		User user = this.getUserByName(userName);
+		user.getTasks().add(task);
+		return user;
+	}
+
+	@Override
+	public User addProjectToUser(String userName, Project project) {
+		User user = this.getUserByName(userName);
+		user.getProjects().add(project);
+		return user;
 	}
 
 }

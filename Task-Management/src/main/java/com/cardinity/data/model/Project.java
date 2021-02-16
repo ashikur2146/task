@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -28,6 +29,9 @@ public class Project implements Serializable {
 	@NotNull
 	@Column(unique=true)
 	private String title;
+
+	@ManyToOne
+	private User user;
 	
 	public Project() {
 		super();
@@ -41,7 +45,15 @@ public class Project implements Serializable {
 	public String getTitle() {
 		return title;
 	}
-	
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 	public Long getId() {
 		return id;
 	}
