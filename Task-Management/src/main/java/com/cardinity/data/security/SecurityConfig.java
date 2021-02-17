@@ -48,12 +48,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable();
-		http.authorizeRequests().antMatchers("/authenticate","/register").permitAll();
-		http.authorizeRequests().antMatchers("/tasks/all-tasks/**").hasAuthority("ADMIN");
-		http.authorizeRequests().antMatchers("/tasks/all-tasks/**").hasAuthority("ADMIN");
-		http.authorizeRequests().antMatchers("/tasks/create-task/").hasAnyAuthority("ADMIN","USER");
-		http.authorizeRequests().antMatchers("/projects/create-project/").hasAnyAuthority("ADMIN","USER");
-		http.authorizeRequests().antMatchers("/projects/all-projects/").hasAuthority("ADMIN");
+		http.authorizeRequests().antMatchers("/authenticate").permitAll();
+		http.authorizeRequests().antMatchers("/tasks/**").hasAnyAuthority("ADMIN","USER");
+		http.authorizeRequests().antMatchers("/projects/**").hasAnyAuthority("ADMIN","USER");
 		http.authorizeRequests().antMatchers("/users/**").hasAuthority("ADMIN");
 	    http.authorizeRequests().anyRequest().authenticated().and()
 				    .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)

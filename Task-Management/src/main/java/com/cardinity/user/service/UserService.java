@@ -16,4 +16,5 @@ public interface UserService {
 	public User addRoleToUser(String userName, String roleName);
 	public User addTaskToUser(String userName, Task task);
 	public User addProjectToUser(String userName, Project project);
+	public User getAuthenticatedUser();
 }

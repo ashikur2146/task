@@ -7,8 +7,6 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.cardinity.data.model.Project;
@@ -35,7 +33,15 @@ public class TaskServiceImpl implements TaskService {
 
 	@Override
 	public Task getTaskById(Long id) {
-		return taskRepository.getOne(id);
+		User user = userService.getAuthenticatedUser();
+		if (user == null)
+			throw new CustomException("User is not logged in.");
+		Task task = taskRepository.getOne(id);
+	    if (task == null)
+			throw new CustomException("Task does not exist");
+		if (!task.getUser().getUserName().equals(user.getUserName()))
+			throw new CustomException("User doesn't have access right to view this task.");
+		return task;
 	}
 
 	@Override
@@ -45,14 +51,7 @@ public class TaskServiceImpl implements TaskService {
 
 	@Override
 	public Task createTask(Task task) {
-		String username = "";
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (principal instanceof UserDetails) {
-			username = ((UserDetails)principal).getUsername();
-		} else {
-			username = principal.toString();
-		}
-		User user = userService.getUserByName(username);
+		User user = userService.getAuthenticatedUser();
 		if (user == null)
 			throw new CustomException("Login before creating a task");
 		task.setUser(user);

@@ -1,5 +1,6 @@
 package com.cardinity.service.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,16 +36,27 @@ public class TaskController {
 	@RequestMapping(value="/all-tasks", method=RequestMethod.GET, produces="application/json")
 	@ResponseBody
 	public ResponseEntity<?> getAllTasks() {
-		return ResponseEntity.ok(taskService.getAllTasks());
+		List<Task> tasks = new ArrayList<>();
+		try {
+			taskService.getAllTasks();
+		} catch(Exception e) {
+			return new ResponseEntity<Message>(new Message(e.getMessage()), HttpStatus.OK);
+		}
+		return ResponseEntity.ok(tasks);
 	}
 	
 	@RequestMapping(value="/all-tasks/user/{name}", method=RequestMethod.GET, produces="application/json")
 	@ResponseBody
 	public ResponseEntity<?> getAllTasksByUserName(final @PathVariable @NotEmpty @NotNull String username) {
-		List<Task> tasks = taskService.getAllTasks().parallelStream()
-				.filter(t -> t.getUser().getUserName().equalsIgnoreCase(username)).collect(Collectors.toList()); 
-		if (tasks.size() < 1)
-			return new ResponseEntity<Message>(new Message("User has no tasks!"), HttpStatus.OK);
+		List<Task> tasks = new ArrayList<>();
+		try {
+			tasks = taskService.getAllTasks().parallelStream()
+					.filter(t -> t.getUser().getUserName().equalsIgnoreCase(username)).collect(Collectors.toList()); 
+			if (tasks.size() < 1)
+				return new ResponseEntity<Message>(new Message("User has no tasks!"), HttpStatus.OK);
+		} catch(Exception e) {
+			return new ResponseEntity<Message>(new Message(e.getMessage()), HttpStatus.OK);
+		}
 		return ResponseEntity.ok(tasks);
 	}
 	
@@ -61,7 +73,13 @@ public class TaskController {
 	@RequestMapping(value="/{id}", method=RequestMethod.GET, produces="application/json")
 	@ResponseBody
 	public ResponseEntity<?> findTask(final @PathVariable @NotNull Long id) {
-		return ResponseEntity.ok(taskService.getTaskById(id));
+		Task task = null;
+		try {
+			task = taskService.getTaskById(id);
+		} catch(Exception e) {
+			return new ResponseEntity<Message>(new Message(e.getMessage()), HttpStatus.OK);
+		}
+		return ResponseEntity.ok(task);
 	}
 	
 	@RequestMapping(value="/create-task", method=RequestMethod.POST, consumes="application/json", produces="application/json")
