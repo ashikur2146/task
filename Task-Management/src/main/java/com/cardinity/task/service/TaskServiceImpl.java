@@ -9,8 +9,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.cardinity.data.model.Project;
@@ -19,7 +17,6 @@ import com.cardinity.data.model.Task;
 import com.cardinity.data.model.User;
 import com.cardinity.data.repository.TaskRepository;
 import com.cardinity.project.exception.CustomException;
-import com.cardinity.project.exception.Message;
 import com.cardinity.project.service.ProjectService;
 import com.cardinity.user.service.UserService;
 
@@ -52,9 +49,10 @@ public class TaskServiceImpl implements TaskService {
 		if (user == null)
 			throw new CustomException("User is not logged in.");
 		Task task = taskRepository.getOne(id);
+		boolean isAdmin = userService.isAdmin(user);
 	    if (task == null)
 			throw new CustomException("Task does not exist");
-		if (!task.getUser().getUserName().equals(user.getUserName()))
+		if (!task.getUser().getUserName().equals(user.getUserName()) && !isAdmin)
 			throw new CustomException("User doesn't have access right to view this task.");
 		return task;
 	}
@@ -168,5 +166,17 @@ public class TaskServiceImpl implements TaskService {
 		findTask.setEndDate(endDate);
 		findTask.setStatus(status);
 		return taskRepository.saveAndFlush(findTask);
+	}
+
+	@Override
+	public List<Task> getAllTasksByUser(String username) {
+		User user = userService.getAuthenticatedUser();
+		if (user == null)
+			throw new CustomException(AUTHENTICATION_MESSAGE);
+		boolean isAdmin = userService.isAdmin(user);
+		if (!isAdmin)
+			throw new CustomException(USER_MESSAGE);
+		return taskRepository.findAll().parallelStream()
+				.filter(t -> t.getUser().getUserName().equals(user.getUserName())).collect(Collectors.toList());
 	}
 }

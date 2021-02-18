@@ -11,6 +11,7 @@ public interface TaskService {
 	public Task getTaskById(Long id);
 	public Task getTaskByTitle(String title);
 	public List<Task> getAllTasks();
+	public List<Task> getAllTasksByUser(String username);
 	public List<Task> getTasksByProjectId(Long projectId);
 	public List<Task> getTasksByProjectTitle(String projectTitle);
 	public List<Task> getTasksByStatus(Status status);

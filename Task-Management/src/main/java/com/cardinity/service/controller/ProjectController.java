@@ -42,6 +42,8 @@ public class ProjectController {
 		List<Project> projects = new ArrayList<>();
 		try {
 			projects = projectService.getProjectsByUser(user);
+			if (projects.size() < 1)
+				return new ResponseEntity<Message>(new Message("No projects found for this user!"), HttpStatus.OK);
 		} catch(Exception e) {
 			return new ResponseEntity<Message>(new Message(e.getMessage()), HttpStatus.OK);
 		}

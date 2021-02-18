@@ -132,7 +132,7 @@ public class ProjectServiceImpl implements ProjectService {
 		if (user == null)
 			throw new CustomException(AUTHENTICATION_MESSAGE);
 		boolean isAdmin = userService.isAdmin(user);
-		if (!user.getUserName().equals(username) && !isAdmin)
+		if (!isAdmin)
 			throw new CustomException(USER_MESSAGE);
 		List<Project> projects = projectRepository.findAll().parallelStream()
 				.filter(p -> p.getUser().getUserName().equals(username)).collect(Collectors.toList());
