@@ -9,12 +9,13 @@ import com.cardinity.data.model.Task;
 public interface TaskService {
 		
 	public Task getTaskById(Long id);
+	public Task getTaskByTitle(String title);
 	public List<Task> getAllTasks();
 	public List<Task> getTasksByProjectId(Long projectId);
 	public List<Task> getTasksByProjectTitle(String projectTitle);
 	public List<Task> getTasksByStatus(Status status);
 	public List<Task> getTasksByDueDate(Date dueDate);
 	public Task createTask(Task task);
-	public Task updateTask(Task task);
+	public Task updateTask(Long id, Task task);
 	public void deleteTask(Long id);
 }

@@ -17,4 +17,5 @@ public interface UserService {
 	public User addTaskToUser(String userName, Task task);
 	public User addProjectToUser(String userName, Project project);
 	public User getAuthenticatedUser();
+	public boolean isAdmin(User user);
 }

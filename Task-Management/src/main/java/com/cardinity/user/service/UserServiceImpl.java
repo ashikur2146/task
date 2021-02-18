@@ -28,6 +28,8 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private RoleService roleService;
+	
+	private static final String ADMIN_ROLE = "ADMIN";
 
 	@Override
 	public User getOneById(Long id) {
@@ -116,5 +118,10 @@ public class UserServiceImpl implements UserService {
 		}
 		User user = this.getUserByName(username);
 		return user;
+	}
+
+	@Override
+	public boolean isAdmin(User user) {
+		return user.getRoles().parallelStream().anyMatch(role -> role.getRoleName().equals(ADMIN_ROLE));
 	}
 }

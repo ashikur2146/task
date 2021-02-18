@@ -3,10 +3,12 @@ package com.cardinity.data.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Temporal;
@@ -45,11 +47,11 @@ public class Task implements Serializable {
 	private String status;
 	
 	@NotNull
-	@ManyToOne
+	@ManyToOne(cascade = {CascadeType.ALL})
 	private Project project;
 	
 	@NotNull
-	@ManyToOne
+	@ManyToOne(cascade = {CascadeType.ALL})
 	private User user;
 	
 	@Temporal(TemporalType.DATE)

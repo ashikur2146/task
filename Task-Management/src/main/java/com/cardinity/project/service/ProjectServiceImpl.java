@@ -9,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cardinity.data.model.Project;
+import com.cardinity.data.model.Task;
 import com.cardinity.data.model.User;
 import com.cardinity.data.repository.ProjectRepository;
 import com.cardinity.project.exception.CustomException;
+import com.cardinity.task.service.TaskService;
 import com.cardinity.user.service.UserService;
 
 @Service
@@ -24,10 +26,14 @@ public class ProjectServiceImpl implements ProjectService {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private TaskService taskService;
+	
 	private static final String AUTHENTICATION_MESSAGE = "USER AUTHENTICATION IS REQUIRED!";
 	private static final String PROJECT_MESSAGE = "Project does not exist.";
 	private static final String USER_MESSAGE = "User does not have access right.";
 	private static final String ADMIN_ROLE = "ADMIN";
+	private static final String DUPLICATE_PROJECT_MESSAGE = "Project name is duplicate";
 	
 	@Override
 	public Project findProject(Long id) {
@@ -58,7 +64,7 @@ public class ProjectServiceImpl implements ProjectService {
 		if (user == null)
 			throw new CustomException(AUTHENTICATION_MESSAGE);
 		boolean isAdmin = user.getRoles().parallelStream().anyMatch(role -> role.getRoleName().equals(ADMIN_ROLE));
-		Project foundProject = findProjectByTitle(project.getTitle());
+		Project foundProject = findProjectByTitle(project.getName());
 	    if (foundProject == null)
 			throw new CustomException(PROJECT_MESSAGE);
 		if (!project.getUser().getUserName().equals(user.getUserName()) && !isAdmin)
@@ -71,10 +77,11 @@ public class ProjectServiceImpl implements ProjectService {
 		User user = userService.getAuthenticatedUser();
 		if (user == null)
 			throw new CustomException(AUTHENTICATION_MESSAGE);
-		boolean isAdmin = user.getRoles().parallelStream().anyMatch(role -> role.getRoleName().equals(ADMIN_ROLE));
-		if (!isAdmin)
-			throw new CustomException(USER_MESSAGE);
-		return projectRepository.findAll();
+		boolean isAdmin = userService.isAdmin(user);
+		if (isAdmin)
+			return projectRepository.findAll();
+		return projectRepository.findAll().parallelStream()
+				.filter(p -> p.getUser().getUserName().equals(user.getUserName())).collect(Collectors.toList());
 	}
 
 	@Override
@@ -82,12 +89,17 @@ public class ProjectServiceImpl implements ProjectService {
 		User user = userService.getAuthenticatedUser();
 		if (user == null)
 			throw new CustomException(AUTHENTICATION_MESSAGE);
-		boolean isAdmin = user.getRoles().parallelStream().anyMatch(role -> role.getRoleName().equals(ADMIN_ROLE));
+		boolean isAdmin = userService.isAdmin(user);
 		Project project = projectRepository.getOne(id);
 		if (project == null)
 			throw new CustomException(PROJECT_MESSAGE);
 		if (!project.getUser().getUserName().equals(user.getUserName()) && !isAdmin)
 			throw new CustomException(USER_MESSAGE);
+		List<Task> allTasksByProject = taskService.getAllTasks().parallelStream()
+				.filter(t -> t.getProject().getId() == id).collect(Collectors.toList());
+		allTasksByProject.forEach(t -> {
+			taskService.deleteTask(t.getId());
+		});
 		projectRepository.delete(project);
 	}
 
@@ -96,8 +108,8 @@ public class ProjectServiceImpl implements ProjectService {
 		User user = userService.getAuthenticatedUser();
 		if (user == null)
 			throw new CustomException(AUTHENTICATION_MESSAGE);
-		boolean isAdmin = user.getRoles().parallelStream().anyMatch(role -> role.getRoleName().equals(ADMIN_ROLE));
-		Project project = this.getAllProjects().parallelStream().filter(p -> p.getTitle().equals(projectTitle))
+		boolean isAdmin = userService.isAdmin(user);
+		Project project = projectRepository.findAll().parallelStream().filter(p -> p.getName().equals(projectTitle))
 				.findFirst().orElse(null);
 		if (project == null)
 			throw new CustomException(PROJECT_MESSAGE);
@@ -105,13 +117,21 @@ public class ProjectServiceImpl implements ProjectService {
 			throw new CustomException(USER_MESSAGE);
 		return project;
 	}
+	 
+	
+	/*
+	 * @Override public Project findProjectByTitle(String projectTitle) { return
+	 * projectRepository.findAll().parallelStream().filter(p ->
+	 * p.getName().equals(projectTitle)) .findFirst().orElse(null); }
+	 */
+	
 
 	@Override
 	public List<Project> getProjectsByUser(String username) {
 		User user = userService.getAuthenticatedUser();
 		if (user == null)
 			throw new CustomException(AUTHENTICATION_MESSAGE);
-		boolean isAdmin = user.getRoles().parallelStream().anyMatch(role -> role.getRoleName().equals(ADMIN_ROLE));
+		boolean isAdmin = userService.isAdmin(user);
 		if (!user.getUserName().equals(username) && !isAdmin)
 			throw new CustomException(USER_MESSAGE);
 		List<Project> projects = projectRepository.findAll().parallelStream()

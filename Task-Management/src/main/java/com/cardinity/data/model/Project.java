@@ -28,7 +28,7 @@ public class Project implements Serializable {
 	@NotEmpty
 	@NotNull
 	@Column(unique=true)
-	private String title;
+	private String name;
 
 	@ManyToOne
 	private User user;
@@ -37,13 +37,13 @@ public class Project implements Serializable {
 		super();
 	}
 	
-	public Project(String title) {
+	public Project(String name) {
 		super();
-		this.title = title;
+		this.name = name;
 	}
 	
-	public String getTitle() {
-		return title;
+	public String getName() {
+		return name;
 	}
 
 	public User getUser() {
