@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -32,7 +31,6 @@ public class Task implements Serializable {
 	
 	@NotEmpty
 	@NotNull
-	@Column(unique=true)
 	private String title;
 	
 	@NotEmpty

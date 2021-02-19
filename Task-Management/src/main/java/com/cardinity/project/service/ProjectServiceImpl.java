@@ -31,9 +31,9 @@ public class ProjectServiceImpl implements ProjectService {
 	
 	private static final String AUTHENTICATION_MESSAGE = "USER AUTHENTICATION IS REQUIRED!";
 	private static final String PROJECT_MESSAGE = "Project does not exist.";
+	private static final String PROJECT_MESSAGE_2 = "Project already exists.";
 	private static final String USER_MESSAGE = "User does not have access right.";
 	private static final String ADMIN_ROLE = "ADMIN";
-	private static final String DUPLICATE_PROJECT_MESSAGE = "Project name is duplicate";
 	
 	@Override
 	public Project findProject(Long id) {
@@ -54,6 +54,10 @@ public class ProjectServiceImpl implements ProjectService {
 		User user = userService.getAuthenticatedUser();
 		if (user == null)
 			throw new CustomException(AUTHENTICATION_MESSAGE);
+		Project projectFound = projectRepository.findAll().parallelStream().filter(p -> p.getName().equals(project.getName()))
+				.findFirst().orElse(null);
+		if (projectFound != null)
+			throw new CustomException(PROJECT_MESSAGE_2);
 		project.setUser(user);
 		return projectRepository.saveAndFlush(project);
 	}
