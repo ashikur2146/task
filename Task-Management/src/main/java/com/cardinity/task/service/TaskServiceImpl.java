@@ -37,8 +37,6 @@ public class TaskServiceImpl implements TaskService {
 	private static final String TASK_MESSAGE = "Task does not exist.";
 	private static final String PROJECT_MESSAGE = "Project does not exist.";
 	private static final String USER_MESSAGE = "User does not have access right.";
-	private static final String DUPLICATE_TASK_MESSAGE = "task name is duplicate";
-	private static final String DUE_DATE_MESSAGE = "Date should be in the past.";
 	
 	private static final String CLOSED_STATUS = "CLOSED";
 	private static final String CLOSED_STATUS_EDIT_MESSAGE = "CLOSED TASK CANNOT BE EDITED.";
@@ -123,19 +121,16 @@ public class TaskServiceImpl implements TaskService {
 	}
 
 	@Override
-	public List<Task> getTasksByDueDate(Date dueDate) {
-		Date today = new Date();
-		boolean before = today.after(dueDate);
-		if (!before)
-			throw new CustomException(DUE_DATE_MESSAGE);
+	public List<Task> getExpiredTasks(){
 		User user = userService.getAuthenticatedUser();
 		if (user == null)
 			throw new CustomException(AUTHENTICATION_MESSAGE);
 		boolean isAdmin = userService.isAdmin(user);
 		if (isAdmin)
-			return taskRepository.findAll().parallelStream().filter(task -> task.getEndDate() == dueDate)
+			return taskRepository.findAll().parallelStream().filter(task -> new Date().after(task.getEndDate()))
 					.collect(Collectors.toList());
-		return taskRepository.findAll().parallelStream().filter(task -> task.getEndDate() == dueDate && task.getUser().getUserName().equals(user.getUserName()))
+		return taskRepository.findAll().parallelStream().filter(
+				task -> new Date().after(task.getEndDate()) && task.getUser().getUserName().equals(user.getUserName()))
 				.collect(Collectors.toList());
 	}
 

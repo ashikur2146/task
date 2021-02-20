@@ -32,6 +32,7 @@ public class ProjectServiceImpl implements ProjectService {
 	private static final String AUTHENTICATION_MESSAGE = "USER AUTHENTICATION IS REQUIRED!";
 	private static final String PROJECT_MESSAGE = "Project does not exist.";
 	private static final String PROJECT_MESSAGE_2 = "Project already exists.";
+	private static final String PROJECT_MESSAGE_3 = "Invalid Project creation request.";
 	private static final String USER_MESSAGE = "User does not have access right.";
 	private static final String ADMIN_ROLE = "ADMIN";
 	
@@ -59,6 +60,8 @@ public class ProjectServiceImpl implements ProjectService {
 		if (projectFound != null)
 			throw new CustomException(PROJECT_MESSAGE_2);
 		project.setUser(user);
+		if (project.getName() == null)
+			throw new CustomException(PROJECT_MESSAGE_3);
 		return projectRepository.saveAndFlush(project);
 	}
 	

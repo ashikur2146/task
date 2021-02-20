@@ -3,7 +3,6 @@ package com.cardinity.service.controller;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -148,12 +147,12 @@ public class TaskController {
 		return ResponseEntity.ok(tasks);
 	}
 
-	@RequestMapping(value = "/due/{date}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/expired", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public ResponseEntity<?> getTasksByProjectId(final @PathVariable Date dueDate) {
+	public ResponseEntity<?> getExpiredTasks() {
 		List<Task> tasks = new ArrayList<>();
 		try {
-			tasks = taskService.getTasksByDueDate(dueDate);
+			tasks = taskService.getExpiredTasks();
 		} catch (Exception e) {
 			return new ResponseEntity<Message>(new Message(e.getMessage()), HttpStatus.OK);
 		}
