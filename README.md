@@ -4,7 +4,7 @@ Features:
 ---------
 Token based stateless user authentication\
 Endpoint security\
-CRUD and Search operations on task and projects\
+CRUD and Search operations on task and projects
 
 Admin and user operations:
 --------------------------
@@ -17,12 +17,12 @@ Admin and user operations:
 • Search tasks\
 ◦ Get all by project\
 ◦ Get expired tasks (due date in the past)\
-◦ By status\
+◦ By status
 
 ADMIN additionally can do:
 -------------------------
 • Get all tasks by user\
-• Get all projects by user\
+• Get all projects by user
 
 Built With:
 -----------
@@ -30,20 +30,41 @@ Java 11\
 Spring Boot\
 JWT Spring Security\
 MySQL\
-Maven\
+Maven
 
 TEST USERS:
 -----------
 ADMIN / ADMIN,\
 user1 / user1,\
 user2 / user2,\
-user3 / user3\
+user3 / user3
 
-How to run the project:-
------------------------
-**Step 1:** git clone 
-**Step 2:** mvn clean install
-**step 3:** run using IDE / directly on apache tomcat app server
+How to run the project locally:-
+-------------------------------
+Required tools:
+---------------
+# Java 11 jdk
+# Git client
+# mysql client
+# Maven
+# REST Client (for example, Postman)
+
+Follow the steps below to execute the application:-\
+
+**Step 1:** Clone the project using git client from git repository with the following command (**git clone https://github.com/ashikur2146/task.git**)\
+	    in your local machine.\	
+**Step 2:** navigate to **../task/Task-Management/src/main/resources** directory
+**step 3:** open the **application.properties** in a text editor and update the following credentials:
+            **spring.datasource.username**=<<my client root username>>
+	    **spring.datasource.password**=<<my client root password>>
+
+**step 4:** navigate to **task/Task-Management/** where **pom.xml** is located
+**step 5:** now open the **cmd terminal** and execute command **mvn clean install**
+**step 6:** if build is successful, navigate to **/target** directory
+**step 7:** open the *cmd terminal* and execute command "java -jar Task-Management-0.0.1-SNAPSHOT.jar"
+
+
+
 
 <<-- Heroku java deployment has to be added -->>
 
