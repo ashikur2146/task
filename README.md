@@ -51,22 +51,18 @@ Required tools:
 
 Follow the steps below to execute the application:-
 
-**Step 1:** Clone the project using git client from git repository with the following command (**git clone https://github.com/ashikur2146/task.git**) in your local machine.\	
-**Step 2:** navigate to **../task/Task-Management/src/main/resources** directory\
+**Step 1:** Clone the project using git client from git repository with the following command (**git clone https://github.com/ashikur2146/task.git**) in your local machine.	
+**Step 2:** navigate to **../task/Task-Management/src/main/resources** directory
 
 **step 3:** open the **application.properties** in a text editor and update the following credentials:
             **spring.datasource.username**=<<my client root username>>
 	    **spring.datasource.password**=<<my client root password>>
 
 **step 4:** navigate to **task/Task-Management/** where **pom.xml** is located\
-**step 5:** now open the **cmd terminal** and execute command **mvn clean install**\
-**step 6:** if build is successful, navigate to **/target** directory\
-**step 7:** open the *cmd terminal* and execute command "java -jar Task-Management-0.0.1-SNAPSHOT.jar"
+**step 5:** now open the **cmd terminal** in that path and execute command **mvn package -Dmaven.test.skip=true**\
+**step 6:** if build is successful, navigate to **/target** directory and open cmd terminal in that path
+**step 7:** execute command "java -jar Task-Management-0.0.1-SNAPSHOT.war"
 
-
-
-
-<<-- Heroku java deployment has to be added -->>
 
 
 Endpoints with sample request and response:-
