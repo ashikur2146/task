@@ -82,7 +82,7 @@ GET: http://localhost:8080/tasks/task-id
 
 GET: http://localhost:8080/tasks/project/project-id
 
-GET: http://localhost:8080/tasks/status/status (example, http://localhost:8080/tasks/status/closed)
+GET: http://localhost:8080/tasks/status/status (example, http://localhost:8080/tasks/status/CLOSED) [OPEN, CLOSED, INPROGRESS] (case sensitive)
 
 GET: http://localhost:8080/tasks/expired
 
