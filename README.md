@@ -50,6 +50,7 @@ Required tools:
 # REST Client (for example, Postman)
 
 Follow the steps below to execute the application:-
+-------------------------------------------------
 
 **Step 1:** Clone the project using git client from git repository with the following command (**git clone https://github.com/ashikur2146/task.git**) in your local machine.	
 **Step 2:** navigate to **../task/Task-Management/src/main/resources** directory
@@ -63,11 +64,33 @@ Follow the steps below to execute the application:-
 **step 6:** if build is successful, navigate to **/target** directory and open cmd terminal in that path
 **step 7:** execute command "java -jar Task-Management-0.0.1-SNAPSHOT.war"
 
+if messages like the following are shown in the terminal, then the application is running on port 8080.\
+
+Tomcat started on port(s): 8080 (http) with context path ''\
+Started TaskManagementApplication in 18.773 seconds (JVM running for 20.146)
+
 
 
 Endpoints with sample request and response:-
 -------------------------------------------
-<< List will be added >>
+POST: http://localhost:8080/authenticate\
+POST: http://localhost:8080/projects/create\
+POST: http://localhost:8080/tasks/create\
+
+GET: http://localhost:8080/projects/all\
+GET: http://localhost:8080/projects/user/username\
+GET: http://localhost:8080/projects/project-id\
+
+GET: http://localhost:8080/tasks/all\
+GET: http://localhost:8080/tasks/user/username\
+GET: http://localhost:8080/tasks/task-id\
+GET: http://localhost:8080/tasks/project/project-id\
+GET: http://localhost:8080/tasks/status/status\
+GET: http://localhost:8080/tasks/expired\
+
+PUT: http://localhost:8080/tasks/update/task-id\
+
+DELETE: http://localhost:8080/projects/delete/project-id\
 
 User Authentication:-
 ---------------------
