@@ -64,33 +64,31 @@ Follow the steps below to execute the application:-
 **step 6:** if build is successful, navigate to **/target** directory and open cmd terminal in that path
 **step 7:** execute command "java -jar Task-Management-0.0.1-SNAPSHOT.war"
 
-if messages like the following are shown in the terminal, then the application is running on port 8080.\
+if messages like the following are shown in the terminal, then the application is running on port 8080.
 
 Tomcat started on port(s): 8080 (http) with context path ''\
 Started TaskManagementApplication in 18.773 seconds (JVM running for 20.146)
 
-
-
 Endpoints with sample request and response:-
 -------------------------------------------
-POST: http://localhost:8080/authenticate\
-POST: http://localhost:8080/projects/create\
-POST: http://localhost:8080/tasks/create\
+POST: http://localhost:8080/authenticate
+POST: http://localhost:8080/projects/create
+POST: http://localhost:8080/tasks/create
 
-GET: http://localhost:8080/projects/all\
-GET: http://localhost:8080/projects/user/username\
-GET: http://localhost:8080/projects/project-id\
+GET: http://localhost:8080/projects/all
+GET: http://localhost:8080/projects/user/username (example, http://localhost:8080/projects/user/user1)
+GET: http://localhost:8080/projects/project-id (example, http://localhost:8080/projects/2)
 
-GET: http://localhost:8080/tasks/all\
-GET: http://localhost:8080/tasks/user/username\
-GET: http://localhost:8080/tasks/task-id\
-GET: http://localhost:8080/tasks/project/project-id\
-GET: http://localhost:8080/tasks/status/status\
-GET: http://localhost:8080/tasks/expired\
+GET: http://localhost:8080/tasks/all
+GET: http://localhost:8080/tasks/user/username
+GET: http://localhost:8080/tasks/task-id
+GET: http://localhost:8080/tasks/project/project-id
+GET: http://localhost:8080/tasks/status/status (example, http://localhost:8080/tasks/status/closed)
+GET: http://localhost:8080/tasks/expired
 
-PUT: http://localhost:8080/tasks/update/task-id\
+PUT: http://localhost:8080/tasks/update/task-id
 
-DELETE: http://localhost:8080/projects/delete/project-id\
+DELETE: http://localhost:8080/projects/delete/project-id
 
 User Authentication:-
 ---------------------
@@ -113,10 +111,9 @@ Response:
     "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBRE1JTiIsImV4cCI6MTYxMzc1NjgzMSwiaWF0IjoxNjEzNzQ5NjMxfQ.6bIHK6zED3r8JVz4dQrC7xLh17_lP6-V68yCErDbog2hoflCcyXB2EwpNkr9B9XY_nkUJDQSx5GMoeo3yiPbvQ"
 }
 
-Project Creation & Retrieve:-
+Project Creation:-
 ------------------------------
 POST: http://localhost:8080/projects/create
-GET: http://localhost:8080/projects/all
 Request Body:
 ------------
 {
@@ -133,6 +130,7 @@ Possible Responses:
     "message": "Project already exists."
 }
 
+
 task creation:-
 -------------
 POST: http://localhost:8080/tasks/create
@@ -148,8 +146,8 @@ Request Body:
 	"endDate":"2021-02-16" <-- (YYYY-MM-DD)
 }
 
-Response Body:
--------------
+Possible Response Body:
+----------------------
 {
     "message": "Task creation is successful!"
 }
@@ -158,3 +156,26 @@ Response Body:
     "message": "Project does not exist."
 }
 
+**Update a task:**
+
+PUT: http://localhost:8080/tasks/update/task-id
+
+Request Body:
+------------
+{
+	"description":"task01 of project 01"
+	"status":"OPEN",
+	"endDate":"2021-02-16" <-- (YYYY-MM-DD)
+}
+
+Possible Response Body:
+----------------------
+{
+    "message": "Task updated successfully!"
+}
+
+**Authentication related responses:**
+
+{
+    "message": "User does not have access right."
+}
